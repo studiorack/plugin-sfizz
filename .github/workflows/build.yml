@@ -134,9 +134,9 @@ jobs:
         path: ${{runner.workspace}}/build/${{env.install_name}}.tar.gz
 
   build_for_mingw32:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     container:
-      image: archlinux
+      image: archlinux:base-devel-20210207.0.15200
     steps:
     - name: Set install name
       run: |
@@ -152,11 +152,16 @@ jobs:
         SigLevel = Optional TrustAll
         Server = https://github.com/jpcima/arch-mingw-w64/releases/download/repo.\$arch/
         EOF
+    - name: Verify pacman directories and permissions
+      shell: bash
+      run: |
+        id
+        ls -ld /var/lib/pacman
+        ls -lR /var/lib/pacman/
     - name: Set up dependencies
       shell: bash
       run: |
-        pacman -Sqyu --noconfirm
-        pacman -Sq --needed --noconfirm base-devel git wget mingw-w64-cmake mingw-w64-gcc mingw-w64-pkg-config mingw-w64-libsndfile
+        pacman -v -Sqyu --noconfirm --needed --noconfirm base-devel git wget mingw-w64-cmake mingw-w64-gcc mingw-w64-pkg-config mingw-w64-libsndfile
     - uses: actions/checkout@v2
       with:
         submodules: recursive
@@ -198,9 +203,9 @@ jobs:
         path: ${{runner.workspace}}/build/${{env.install_name}}.tar.gz
 
   build_for_mingw64:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     container:
-      image: archlinux
+      image: archlinux:base-devel-20210207.0.15200
     steps:
     - name: Set install name
       run: |
