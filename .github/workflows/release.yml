@@ -79,7 +79,7 @@ jobs:
           cmake \
             -G "${{ matrix.generator }}" \
             -DCMAKE_BUILD_TYPE="Release" \
-            -DSFIZZ_JACK=ON \
+            -DSFIZZ_JACK=OFF \
             -DSFIZZ_VST=ON \
             -DSFIZZ_LV2_UI=ON \
             -DSFIZZ_PUREDATA=ON \
