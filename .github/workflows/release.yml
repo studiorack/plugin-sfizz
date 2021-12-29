@@ -55,19 +55,7 @@ jobs:
       - name: Install Linux dependencies
         if: matrix.os == 'ubuntu-latest'
         shell: bash
-        run: sudo apt-get update && sudo apt-get install cmake gcc \
-          libjack-jackd2-dev \
-          libsndfile1-dev \
-          libcairo2-dev \
-          libpango1.0-dev \
-          libfontconfig1-dev \
-          libx11-xcb-dev \
-          libxcb-util-dev \
-          libxcb-cursor-dev \
-          libxcb-xkb-dev \
-          libxkbcommon-dev \
-          libxkbcommon-x11-dev \
-          libxcb-keysyms1-dev
+        run: sudo apt-get update && sudo apt-get install cmake gcc libjack-dev "libstdc++6" libx11-xcb-dev libxcb-util-dev libxcb-cursor-dev libxcb-xkb-dev libxkbcommon-dev libxkbcommon-x11-dev libfontconfig1-dev libcairo2-dev libgtkmm-3.0-dev libsqlite3-dev libxcb-keysyms1-dev libasound2-dev
 
       - name: Install macOS dependencies
         if: matrix.os == 'macos-latest'
