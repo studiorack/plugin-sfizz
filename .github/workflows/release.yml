@@ -83,7 +83,7 @@ jobs:
             -DSFIZZ_VST=ON \
             -DSFIZZ_LV2_UI=ON \
             -DSFIZZ_PUREDATA=ON \
-            -DSFIZZ_TESTS=ON \
+            -DSFIZZ_TESTS=OFF \
             -DSFIZZ_SHARED=ON \
             -DSFIZZ_STATIC_DEPENDENCIES=OFF \
             -DSFIZZ_LV2=ON \
@@ -146,6 +146,9 @@ jobs:
       - name: Compress sfizz render
         shell: bash
         run: |
+          ls ./build
+          ls ./build/clients
+          ls ./build/clients/Release
           cd ./build/clients/Release
           zip -r ../sfizz-render-${{ matrix.name }}.zip *
 
