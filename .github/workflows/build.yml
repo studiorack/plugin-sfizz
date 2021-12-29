@@ -1,15 +1,15 @@
 name: build
 
-on:
-  push:
-    branches:
-      - '*'
-    tags:
-      - '[0-9]*'
-      - 'v[0-9]*'
-  pull_request:
-    branches:
-      - '*'
+# on:
+#   push:
+#     branches:
+#       - '*'
+#     tags:
+#       - '[0-9]*'
+#       - 'v[0-9]*'
+#   pull_request:
+#     branches:
+#       - '*'
 env:
   BUILD_TYPE: Release
 
