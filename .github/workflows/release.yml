@@ -38,16 +38,19 @@ jobs:
             name: linux
             generator: Unix Makefiles
             path: ./build
+            path_render: ./build/clients
           - os: macos-latest
             arch: x86-64
             name: mac
             generator: Xcode
             path: ./build
+            path_render: ./build/clients/Release
           - os: windows-latest
             arch: x86-64
             name: win
             generator: Visual Studio 16 2019
             path: ./build
+            path_render: ./build/clients/Release
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -146,11 +149,8 @@ jobs:
       - name: Compress sfizz render
         shell: bash
         run: |
-          ls ./build
-          ls ./build/clients
-          ls ./build/clients/Release
-          cd ./build/clients/Release
-          zip -r ../sfizz-render-${{ matrix.name }}.zip *
+          cd "${{ matrix.path_render }}"
+          zip -r ./sfizz-render-${{ matrix.name }}.zip sfizz_render*
 
       - name: Upload sfizz render
         uses: actions/upload-release-asset@v1
@@ -158,7 +158,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: ./build/clients/sfizz-render-${{ matrix.name }}.zip
+          asset_path: ${{ matrix.path_render }}/sfizz-render-${{ matrix.name }}.zip
           asset_name: sfizz-render-${{ matrix.name }}.zip
           asset_content_type: application/zip
 
