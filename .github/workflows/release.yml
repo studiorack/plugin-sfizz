@@ -163,7 +163,7 @@ jobs:
           asset_content_type: application/zip
 
       - name: Upload metadata
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'windows-latest'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
