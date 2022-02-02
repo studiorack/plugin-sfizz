@@ -12,7 +12,6 @@ jobs:
     runs-on: macos-latest
     outputs:
       id: ${{ steps.draft_release.outputs.id }}
-      html_url: ${{ steps.draft_release.outputs.html_url }}
       upload_url: ${{ steps.draft_release.outputs.upload_url }}
     steps:
       - name: Draft release
@@ -33,18 +32,6 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         include:
-          - os: ubuntu-latest
-            arch: x86-64
-            name: linux
-            generator: Unix Makefiles
-            path: ./build
-            path_render: ./build/clients
-          - os: macos-latest
-            arch: x86-64
-            name: mac
-            generator: Xcode
-            path: ./build
-            path_render: ./build/clients/Release
           - os: windows-latest
             arch: x86-64
             name: win
@@ -54,16 +41,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Install Linux dependencies
-        if: matrix.os == 'ubuntu-latest'
-        shell: bash
-        run: sudo apt-get update && sudo apt-get install cmake gcc libjack-dev "libstdc++6" libx11-xcb-dev libxcb-util-dev libxcb-cursor-dev libxcb-xkb-dev libxkbcommon-dev libxkbcommon-x11-dev libfontconfig1-dev libcairo2-dev libgtkmm-3.0-dev libsqlite3-dev libxcb-keysyms1-dev libasound2-dev
-
-      - name: Install macOS dependencies
-        if: matrix.os == 'macos-latest'
-        shell: bash
-        run: brew install cmake jack
 
       - name: Install Windows dependencies
         if: matrix.os == 'windows-latest'
@@ -161,6 +138,26 @@ jobs:
           asset_path: ${{ matrix.path_render }}/sfizz-render-${{ matrix.name }}.zip
           asset_name: sfizz-render-${{ matrix.name }}.zip
           asset_content_type: application/zip
+
+      - name: Upload sfizz-pd.dll
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: ${{ matrix.path }}/pd/sfizz/sfizz.dll
+          asset_name: sfizz-pd.dll
+          asset_content_type: application/octet-stream
+
+      - name: Upload sfizz.dll
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          asset_path: ${{ matrix.path }}/src/Release/sfizz.dll
+          asset_name: sfizz.dll
+          asset_content_type: application/octet-stream
 
       - name: Upload metadata
         if: matrix.os == 'windows-latest'
