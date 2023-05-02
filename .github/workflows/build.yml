@@ -92,9 +92,7 @@ jobs:
     - name: Build all
       shell: bash
       working-directory: ${{runner.workspace}}/build
-      run: |
-        cmake --build . --config "$BUILD_TYPE" -j 2
-        ls ./devtools
+      run: cmake --build . --config "$BUILD_TYPE" -j 2
     - name: Install
       working-directory: ${{runner.workspace}}/build
       shell: bash
@@ -106,6 +104,10 @@ jobs:
         name: Linux tarball
         path: |
           ${{runner.workspace}}/build/${{env.install_name}}.tar.gz
+    - uses: actions/upload-artifact@v3
+      with:
+        name: Linux dev tools
+        path: |
           ${{runner.workspace}}/build/devtools/sfizz_preprocessor
           ${{runner.workspace}}/build/devtools/sfizz_importer
           ${{runner.workspace}}/build/devtools/sfizz_hiir_designer
@@ -196,9 +198,7 @@ jobs:
     - name: Build plugins
       shell: bash
       working-directory: ${{runner.workspace}}/build
-      run: |
-        cmake --build . --config "$BUILD_TYPE" -j 2
-        ls ./devtools
+      run: cmake --build . --config "$BUILD_TYPE" -j 2
     - name: Package OSX bundles
       shell: bash
       working-directory: ${{runner.workspace}}
@@ -218,6 +218,10 @@ jobs:
         name: MacOS installer
         path: |
           ${{runner.workspace}}/build/${{env.install_name}}.pkg
+    - uses: actions/upload-artifact@v3
+      with:
+        name: MacOS dev tools
+        path: |
           ${{runner.workspace}}/build/devtools/sfizz_preprocessor
           ${{runner.workspace}}/build/devtools/sfizz_importer
           ${{runner.workspace}}/build/devtools/sfizz_hiir_designer
@@ -292,7 +296,6 @@ jobs:
       working-directory: ${{runner.workspace}}/build
       run: |
         cmake "${Env:GITHUB_WORKSPACE}" -G"Visual Studio 16 2019" -A"${{matrix.release_arch}}" -DCMAKE_BUILD_TYPE="${Env:BUILD_TYPE}" -DCMAKE_CXX_STANDARD=17 -DSFIZZ_TESTS=ON -DSFIZZ_VST=ON -DSFIZZ_LV2=ON -DSFIZZ_PUREDATA=ON -DSFIZZ_DEVTOOLS=ON
-        dir ./devtools
     - name: Build tests
       working-directory: ${{runner.workspace}}/build
       run: cmake --build . --config "${Env:BUILD_TYPE}" -j 2 --target sfizz_tests
@@ -320,6 +323,10 @@ jobs:
         name: ${{matrix.pkg_platform}} installer
         path: |
           ${{runner.workspace}}/build/${{env.install_name}}.exe
+    - uses: actions/upload-artifact@v3
+      with:
+        name: Windows dev tools
+        path: |
           ${{runner.workspace}}/build/devtools/sfizz_preprocessor.exe
           ${{runner.workspace}}/build/devtools/sfizz_importer.exe
           ${{runner.workspace}}/build/devtools/sfizz_hiir_designer.exe
