@@ -77,7 +77,9 @@ jobs:
           -DSFIZZ_SHARED=OFF \
           -DSFIZZ_STATIC_DEPENDENCIES=OFF \
           -DSFIZZ_LV2=ON \
-          -DCMAKE_CXX_STANDARD=17
+          -DCMAKE_CXX_STANDARD=17 \
+          -DSFIZZ_DEVTOOLS=ON
+        ls ./build/devtools
     - name: Build tests
       shell: bash
       working-directory: ${{runner.workspace}}/build
@@ -101,7 +103,11 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: Linux tarball
-        path: ${{runner.workspace}}/build/${{env.install_name}}.tar.gz
+        path: |
+          ${{runner.workspace}}/build/${{env.install_name}}.tar.gz
+          ${{runner.workspace}}/build/devtools/sfizz_preprocessor
+          ${{runner.workspace}}/build/devtools/sfizz_importer
+          ${{runner.workspace}}/build/devtools/sfizz_hiir_designer
 
   build_with_libsndfile:
     runs-on: ubuntu-20.04
@@ -173,7 +179,9 @@ jobs:
           -DSFIZZ_JACK=OFF \
           -DSFIZZ_TESTS=ON \
           -DSFIZZ_SHARED=OFF \
-          -DSFIZZ_STATIC_DEPENDENCIES=OFF
+          -DSFIZZ_STATIC_DEPENDENCIES=OFF \
+          -DSFIZZ_DEVTOOLS=ON
+        ls ./build/devtools
     - name: Build tests
       shell: bash
       working-directory: ${{runner.workspace}}/build
@@ -208,6 +216,9 @@ jobs:
         name: MacOS installer
         path: |
           ${{runner.workspace}}/build/${{env.install_name}}.pkg
+          ${{runner.workspace}}/build/devtools/sfizz_preprocessor
+          ${{runner.workspace}}/build/devtools/sfizz_importer
+          ${{runner.workspace}}/build/devtools/sfizz_hiir_designer
 
   build_for_mod:
     runs-on: ubuntu-20.04
@@ -278,7 +289,8 @@ jobs:
     - name: Configure CMake
       working-directory: ${{runner.workspace}}/build
       run: |
-        cmake "${Env:GITHUB_WORKSPACE}" -G"Visual Studio 16 2019" -A"${{matrix.release_arch}}" -DCMAKE_BUILD_TYPE="${Env:BUILD_TYPE}" -DCMAKE_CXX_STANDARD=17 -DSFIZZ_TESTS=ON -DSFIZZ_VST=ON -DSFIZZ_LV2=ON -DSFIZZ_PUREDATA=ON
+        cmake "${Env:GITHUB_WORKSPACE}" -G"Visual Studio 16 2019" -A"${{matrix.release_arch}}" -DCMAKE_BUILD_TYPE="${Env:BUILD_TYPE}" -DCMAKE_CXX_STANDARD=17 -DSFIZZ_TESTS=ON -DSFIZZ_VST=ON -DSFIZZ_LV2=ON -DSFIZZ_PUREDATA=ON -DSFIZZ_DEVTOOLS=ON
+        dir ./build/devtools
     - name: Build tests
       working-directory: ${{runner.workspace}}/build
       run: cmake --build . --config "${Env:BUILD_TYPE}" -j 2 --target sfizz_tests
@@ -304,7 +316,11 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: ${{matrix.pkg_platform}} installer
-        path: ${{runner.workspace}}/build/${{env.install_name}}.exe
+        path: |
+          ${{runner.workspace}}/build/${{env.install_name}}.exe
+          ${{runner.workspace}}/build/devtools/sfizz_preprocessor.exe
+          ${{runner.workspace}}/build/devtools/sfizz_importer.exe
+          ${{runner.workspace}}/build/devtools/sfizz_hiir_designer.exe
 
   # build_for_mingw:
   #   runs-on: ubuntu-20.04
